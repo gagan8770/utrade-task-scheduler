@@ -27,6 +27,7 @@ Execution is simulated using `sleep(duration_ms)`.
 * Task execution simulation
 * Real-time logging of task start and completion
 * Timestamped execution logs
+* Total wall-clock execution time reporting
 
 ---
 
@@ -60,7 +61,7 @@ g++ -std=c++17 main.cpp -o scheduler
 ./scheduler
 ```
 
-The program will read tasks from:
+The program reads tasks from:
 
 ```
 tasks.json
@@ -124,6 +125,7 @@ START Test at Wed Mar 11 16:31:26 2026
 END Test at Wed Mar 11 16:31:27 2026
 
 All tasks completed
+Total execution time: 5100 ms
 ```
 
 ---
@@ -211,6 +213,7 @@ Possible enhancements:
 
 ## Author
 
-Gagan Pahwa
+**Gagan Pahwa**
+Roll No: **2310990247**
 Chitkara University
 uTrade Solutions Campus Hiring 2026 – Round 2
