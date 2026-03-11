@@ -1,0 +1,32 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Compile A",
+      "priority": 2,
+      "depends_on": [],
+      "duration_ms": 1000
+    },
+    {
+      "id": 2,
+      "name": "Compile B",
+      "priority": 1,
+      "depends_on": [],
+      "duration_ms": 1500
+    },
+    {
+      "id": 3,
+      "name": "Link",
+      "priority": 1,
+      "depends_on": [1,2],
+      "duration_ms": 2000
+    },
+    {
+      "id": 4,
+      "name": "Test",
+      "priority": 2,
+      "depends_on": [3],
+      "duration_ms": 1000
+    }
+  ]
+}
