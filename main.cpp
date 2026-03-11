@@ -116,8 +116,9 @@ void executeTask(Task* task) {
         cout << "END " << task->name << " at " << ctime(&end);
     }
 }
-
 int main() {
+
+    auto program_start = chrono::steady_clock::now();
 
     vector<Task> tasks = loadTasks("tasks.json");
 
@@ -150,8 +151,6 @@ int main() {
             ready.push(&t);
     }
 
-    mutex mtx;
-
     while(!ready.empty()) {
 
         Task* t = ready.top();
@@ -169,6 +168,11 @@ int main() {
     }
 
     cout << "\nAll tasks completed\n";
+
+    auto program_end = chrono::steady_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(program_end - program_start);
+
+    cout << "Total execution time: " << duration.count() << " ms\n";
 
     return 0;
 }
