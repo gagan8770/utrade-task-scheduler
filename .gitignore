@@ -1,5 +1,8 @@
+# Compiled files
 *.out
 *.exe
 *.o
 .DS_Store
+scheduler
 .vscode/
+.idea/
