@@ -93,12 +93,17 @@ bool detectCycle(vector<Task> &tasks) {
     return visited != tasks.size();
 }
 
+mutex logMutex;
+
 void executeTask(Task* task) {
 
     auto start = chrono::system_clock::to_time_t(
         chrono::system_clock::now());
 
-    cout << "START " << task->name << " at " << ctime(&start);
+    {
+        lock_guard<mutex> lock(logMutex);
+        cout << "START " << task->name << " at " << ctime(&start);
+    }
 
     this_thread::sleep_for(
         chrono::milliseconds(task->duration_ms));
@@ -106,7 +111,10 @@ void executeTask(Task* task) {
     auto end = chrono::system_clock::to_time_t(
         chrono::system_clock::now());
 
-    cout << "END " << task->name << " at " << ctime(&end);
+    {
+        lock_guard<mutex> lock(logMutex);
+        cout << "END " << task->name << " at " << ctime(&end);
+    }
 }
 
 int main() {
@@ -134,7 +142,6 @@ int main() {
     }
 
     priority_queue<Task*, vector<Task*>, Compare> ready;
-
     unordered_map<int, Task*> taskMap;
 
     for(auto &t : tasks) {
@@ -145,32 +152,21 @@ int main() {
 
     mutex mtx;
 
-    vector<thread> workers;
-
     while(!ready.empty()) {
 
         Task* t = ready.top();
         ready.pop();
 
-        workers.emplace_back([&, t]() {
+        executeTask(t);
 
-            executeTask(t);
+        for(int nxt : graph[t->id]) {
 
-            lock_guard<mutex> lock(mtx);
+            indegree[nxt]--;
 
-            for(int nxt : graph[t->id]) {
-
-                indegree[nxt]--;
-
-                if(indegree[nxt] == 0)
-                    ready.push(taskMap[nxt]);
-            }
-
-        });
+            if(indegree[nxt] == 0)
+                ready.push(taskMap[nxt]);
+        }
     }
-
-    for(auto &w : workers)
-        w.join();
 
     cout << "\nAll tasks completed\n";
 
